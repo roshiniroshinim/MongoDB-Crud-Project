@@ -1,37 +1,63 @@
+import React from "react";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
 import Home from "./Home";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import {BrowserRouter as Router,Routes,Route,Link} from 'react-router-dom';
-import CrudPage from './CrudPage';
-function App(){
-  return ( 
-      <Router>
-          <div className="App">
-              <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
-                  <div className="container-fluid">
-                      <Link to="/" className="navbar-brand">Food CRUD APP</Link>
-                      <button className="navbar-toggler" type="button" data-bs-toggler="collapse" 
-                      data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Togglenavigation">
-                          <span className="navbar-toggler-icon"></span>
-                      </button>
-                      <div className="collapse navbar-collapse" id="navbarNav">
-                          <ul className="navbar-nav ms-auto">
-                              <li className="nav-item">
-                                  <Link to="/" className="nav-link active" aria-current="page">Home</Link>
-                              </li>
-                              <li className="nav-item">
-                                  <Link to="/crud" className="nav-link">ManageFood</Link>
-                              </li>
-                          </ul>
+import BookingPage from "./BookingPage";
+import PackageDetails from "./PackageDetails";
+import CrudPages from "./CrudPages";
+import Destinations from "./Destinations";
 
-                      </div>
-                  </div>
-              </nav>
-              <Routes>
-                  <Route path="/" element={<Home />} />
-                  <Route path="/crud" element={<CrudPage />} />
-              </Routes>
+function App() {
+  return (
+    <Router>
+      <div className="App">
+        {/* NAVBAR */}
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+          <div className="container">
+            <Link className="navbar-brand fw-bold" to="/">Food CRUD APP</Link>
+            <button
+              className="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarNav"
+              aria-controls="navbarNav"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span className="navbar-toggler-icon"></span>
+            </button>
+
+            <div className="collapse navbar-collapse" id="navbarNav">
+              <ul className="navbar-nav ms-auto">
+                <li className="nav-item">
+                  <Link className="nav-link" to="/">Home</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/crud">Manage Food</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/booking">Booking</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/Destinations">Destination</Link>
+                </li>
+              </ul>
+            </div>
           </div>
-      </Router>
+        </nav>
+
+        {/* ROUTES */}
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/crud" element={<CrudPages />} />
+          <Route path="/booking" element={<BookingPage />} />
+          <Route path="/package/:id" element={<PackageDetails />} />
+          <Route path="/destinations" element={<Destinations/>} />
+
+        </Routes>
+      </div>
+    </Router>
   );
 }
+
 export default App;

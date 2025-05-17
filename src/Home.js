@@ -5,16 +5,22 @@ import '@fortawesome/fontawesome-free/css/all.min.css'; // If using icons via cl
 import "./index.css"; // Your custom styles
 import { FaFacebook, FaInstagram, FaTwitter, FaLinkedin } from 'react-icons/fa';
 import { FaHotel, FaUsersCog, FaUserFriends,FaUserAlt,FaCogs } from "react-icons/fa";
-import { FaGlobe,  FaPlane } from "react-icons/fa";
-import Slider from "react-slick";
-import "slick-carousel/slick/slick.css";
+import { FaGlobe,  FaPlane } from "react-icons/fa"
 import "slick-carousel/slick/slick-theme.css";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css/navigation';
+import TourCard from "./TourCard";
+import BookingSection from "./BookingSection";
+import BookingPage from "./BookingPage";
+import SectionPage from "./SectionPage";
+import PackageDetails from "./PackageDetails";
 
-// React Icons imports
-import {
+
+
+import{
   FaYoutube,
   FaDollarSign,
-  FaRegClock,
+  FaRegClock, 
   FaHeadset,
   FaStar
 } from "react-icons/fa";
@@ -30,9 +36,9 @@ import flex3 from "./images/flex3.jpg";
 import flex4 from "./images/flex4.jpg";
 import flex5 from "./images/flex5.jpg";
 import team4 from "./images/team4.jpg";
-import team5 from "./images/team5.jpg";
 import team6 from "./images/team6.jpg";
 import team7 from "./images/team7.jpg";
+import team5 from "./images/team5.jpg";
 import product1 from "./images/product1.jpg";
 import product2 from "./images/product2.jpg";
 import product3 from "./images/product3.jpg";
@@ -45,6 +51,10 @@ import bg2 from "./images/bg2.jpg";
 import bg3 from "./images/bg3.jpg";
 import bg4 from "./images/bg4.jpg";
 import bigimg2 from "./images/bigimg2.jpg";
+
+
+
+
 // Destination Data
 const destinations = [
   { id: 1, name: "Travel the World", image: flex1, rating: 3.9, content: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",price:1500},
@@ -93,49 +103,31 @@ const Home = () => {
     };
    
     // Define RoomCard at the top, BEFORE Home
-const RoomCard = ({ image, title, price, rating }) => (
-  <div
-    className="room-card"
-    style={{
-      border: '1px solid #eee',
-      borderRadius: '10px',
-      width: '300px',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-      overflow: 'hidden',
-    }}
-  >
-    <img
-      src={image}
-      alt={title}
-      style={{ width: '100%', height: '200px', objectFit: 'cover' }}
-    />
-     <div className="room-content">
-        <h3 className="room-title">
-          {title}
-          <span className="rating">
-            {'★'.repeat(rating)}{'☆'.repeat(5 - rating)}
-          </span>
-        </h3>
+// RoomCard.js
 
-        <div className="room-icons">
-          <span>🛏️ 3 Bed</span>
-          <span>🛁 2 Bath</span>
-          <span>📶 Wifi</span>
-        </div>
-
-        <p className="room-desc">
-          Erat ipsum justo amet duo et elitr dolor, est duo duo eos lorem sed
-          diam stet diam sed stet lorem.
-        </p>
-
-        <div className="room-buttons">
-          <button className="btn-orange">READ MORE</button>
-          <button className="btn-dark">BOOK NOW</button>
-        </div>
-      </div>
-    </div>
-);
-
+const travelPackages = [
+  {
+    title: 'Sunny Beach Escape',
+    description: 'Enjoy pristine sands and tropical sunsets.',
+    rate: '$299/night',
+    buttonText: 'Book Now',
+    image: img1,
+  },
+  {
+    title: 'Mountain Adventure',
+    description: 'Hike scenic trails and breathe fresh air.',
+    rate: '$199/night',
+    buttonText: 'Book Now',
+    image: img2,
+  },
+  {
+    title: 'City Lights Tour',
+    description: 'Explore vibrant nightlife and culture.',
+    rate: '$249/night',
+    buttonText: 'Book Now',
+    image:img3.jpg,
+  },
+];
 const services = [
   {
     icon: <FaGlobe className="icon" />,
@@ -263,7 +255,7 @@ const teamMembers1 = [
     name: "Jane Smith",
     location: "Los Angeles, USA",
     image: team5,
-    description: "Diam dolor diam ipsum sit diam amet et eos. Clita erat ipsum et lorem et sit.",
+    description: "Diam dolor diam ipsum sit amet. Clita erat ipsum et lorem et sit.",
   },
   {
     name: "Tom Wayne",
@@ -279,26 +271,90 @@ const teamMembers1 = [
   const next = () => setCurrent((current + 1) % teamMembers.length);
   const prev = () => setCurrent((current - 1 + teamMembers.length) % teamMembers.length);
 
-    return (
+  const [cartCount, setCartCount] = useState(0);
+  const addToCart = () => setCartCount(c => c + 1);
+  
+
+  const [selectedPackage, setSelectedPackage] = useState(null);
+
+  const tourPackages = [
+    {
+      image:flex5,
+      title: "Beach Paradise",
+      price: 12000,
+      description: "Enjoy a sunny getaway with our exclusive beach packages.",
+      button1Text: "Book Now",
+      button2Text: "View Details",
+    },
+    {
+      image: flex4,
+      title: "Mountain Escape",
+      price: 15000,
+      description: "Breathe in the fresh air with our mountain escape tours.",
+      button1Text: "Book Now",
+      button2Text: "View Details",
+    },
+    {
+      image: flex3,
+      title: "Europe Escape",
+      price: 18000,
+      description: "Discover beautiful cities with our Europe escape tours.",
+      button1Text: "Book Now",
+      button2Text: "View Details",
+    },
+  ];
+  const handleShowDetails = (card) => {
+    setSelectedPackage(card);
+  };
+
+  return (
     <>
-     {/* Bootstrap Carousel */}
-  <div className="carousel-container">
-  <Carousel>
-    {[travel1, travel4, travel5].map((image, index) => (
-      <Carousel.Item key={index}>
-        <img className="d-block w-100" src={image} alt={`Slide ${index + 1}`} />
-        <Carousel.Caption>
-          <h6>Planet's Breathtaking marvels</h6>
-          <h1>Transforming Travel Dreams</h1>
-          <p>Expert planning, seamless booking, and personalized service,
-             we ensure every trip is stress-free and extraordinary. Let’s
-             explore the world together—one destination at a time!</p>
-          <button className="btn">Shop Now <i className="fa-solid fa-arrow-right"></i></button>
-        </Carousel.Caption>
-      </Carousel.Item>
-    ))}
-  </Carousel>
-</div>
+      <div className="carousel-container">
+        <Carousel fade>
+          {[travel1, travel4, travel5].map((image, index) => (
+            <Carousel.Item key={index}>
+              <img className="d-block w-100" src={image} alt={`Slide ${index + 1}`} />
+              <Carousel.Caption className="text-start text-white">
+                <h6>Planet's Breathtaking marvels</h6>
+                <h1>Transforming Travel Dreams</h1>
+                <p>
+          Tempor erat elitr rebum at clita. Diam dolor diam ipsum sit. Aliqu
+          diam amet diam et eos. Clita erat ipsum et lorem et sit, sed stet
+          </p>     
+                <button className="btn btn-light">
+                  Shop Now <i className="fa-solid fa-arrow-right"></i>
+                </button>
+              </Carousel.Caption>
+
+              {/* Search Box Outside of Caption */}
+              <div className="search-box shadow-lg p-2 bg-white rounded-3 position-absolute w-75" style={{ bottom: '6px', left: '50%', width:'150px', transform: 'translateX(-50%)' }}>
+                <div className="row g-3">
+                  <div className="col-md-3">
+                    <label>Location</label>
+                    <input type="text" className="form-control" placeholder="Where are you going?" />
+                  </div>
+                  <div className="col-md-2">
+                    <label>Check in</label>
+                    <input type="date" className="form-control" />
+                  </div>
+                  <div className="col-md-2">
+                    <label>Check out</label>
+                    <input type="date" className="form-control" />
+                  </div>
+                  <div className="col-md-3">
+                    <label>Guests</label>
+                    <input type="text" className="form-control" placeholder="1 guest, 1 room" />
+                  </div>
+                  <div className="col-md-2 d-flex align-items-end">
+                    <button className="btn btn-primary w-100">Search</button>
+                  </div>
+                </div>
+              </div>
+            </Carousel.Item>
+          ))}
+        </Carousel>
+      </div>
+    
 
 <section className="hotel-intro">
       <div className="intro-text">
@@ -340,28 +396,6 @@ const teamMembers1 = [
     </div>
     </section>
 
-
-    <section className="rooms-header">
-      <h5 className="subheading">PACKAGES</h5>
-      <h2 className="main-heading">
-        Awesome <span>Packages</span>
-      </h2>
-
-      <div
-        className="room-list"
-        style={{
-          display: 'flex',
-          flexWrap: 'wrap',
-          justifyContent: 'center',
-          gap: '20px',
-          padding: '40px 20px',
-        }}
-      >
-        <RoomCard image={img1} title="Junior Suite" price={"$139.00"} rating={5} />
-        <RoomCard image={img2} title="Executive Suite" price={"$149.00"} rating={4} />
-        <RoomCard image={img3} title="Super Deluxe" price={"$1189.00"} rating={5} />
-      </div>
-    </section>
 
     <div className="services-section">
       <h2 className="services-title">Our Services</h2>
@@ -417,7 +451,8 @@ const teamMembers1 = [
         ))}
       </div>
     </div>
-  
+ 
+
     <div className="booking-section">
       <div className="booking-container">
         <div className="booking-text">
@@ -616,4 +651,5 @@ const teamMembers1 = [
     </>
   );
 };
+
 export default Home;
